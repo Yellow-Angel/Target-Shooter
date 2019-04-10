@@ -49,6 +49,8 @@ function preload ()
     this.load.image('ground', 'assets/platform.png');
     this.load.image('star', 'assets/star.png');
     this.load.image('bomb', 'assets/bomb.png');
+    this.load.image('box', 'assets/box.png');
+
     this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
 }
 
@@ -77,6 +79,9 @@ function create ()
     platforms.create(-40, 240, 'ground').setScale(0.7).refreshBody();
     platforms.create(-60, 220, 'ground').setScale(0.7).refreshBody();
     platforms.create(-80, 200, 'ground').setScale(0.7).refreshBody();
+    platforms.create(750, 200, 'ground').setScale(0.7).refreshBody();
+    platforms.create(400, 260, 'ground').setScale(0.7).refreshBody();
+    platforms.create(290, 370, 'box').setScale(0.7).refreshBody();
 
     // The player and its settings
     player = this.physics.add.sprite(350, 350, 'dude');
