@@ -63,9 +63,7 @@ function create ()
 
         Extends: Phaser.GameObjects.Image,
 
-        initialize:
-
-        function Bullet (scene)
+        initialize: function Bullet (scene)
         {
             Phaser.GameObjects.Image.call(this, scene, 0, 0, 'bullet');
 
@@ -110,6 +108,7 @@ function create ()
 
     //  The platforms group contains the ground and the 2 ledges we can jump on
     platforms = this.physics.add.staticGroup();
+    this.platforms = platforms
 
     //  Here we create the ground.
     //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
@@ -195,16 +194,12 @@ function create ()
         setXY: { x: 12, y: 0, stepX: 20 }
     });
 
-    stars.children.iterate(function (child) {
-
-        //  Give each star a slightly different bounce
-        child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-
-    });
-
-
     //  The score
     scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+
+    //  Bullets
+    this.createBulletEmitter();
+    this.bullets = this.add.group({ classType: Bullet, runChildUpdate: true });
 
     //  Collide the player and the stars with the platforms
     this.physics.add.collider(player, platforms);
@@ -213,9 +208,6 @@ function create ()
     //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
     this.physics.add.overlap(player, stars, collectStar, null, this);
 
-    //  Bullets
-    this.createBulletEmitter();
-    this.bullets = this.add.group({ classType: Bullet, runChildUpdate: true });
 }
 
 function update ()
@@ -259,16 +251,9 @@ function update ()
         }
     }
 
-    //  Emitters to bullets
+    //  Bullet collisions
+    this.physics.world.overlap(this.bullets, this.platforms, console.log, null, this);
 
-    this.bullets.children.each(function(b) {
-        if (b.active)
-        {
-            this.flares.setPosition(b.x, b.y);
-            this.flares.setSpeed(b.speed + 500 * -1);
-            this.flares.emitParticle(1);
-        }
-    }, this);
 }
 
 function collectStar (player, star)
